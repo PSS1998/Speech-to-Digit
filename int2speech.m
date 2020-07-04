@@ -11,5 +11,6 @@ function y = int2speech(digits, N)
         temp = zeros(2000,1);
         y = [y; temp];
     end
-    y = y(1:num*4000+(num-1)*2000);
+    temp = zeros(2000,1);
+    y = [temp; y];
 end
