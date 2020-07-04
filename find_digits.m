@@ -1,11 +1,11 @@
 function y = find_digits(x)
     y = [];
     count_pow = [];
-    count = 2;
-    len = floor(size(x,1)/2000);
-    for i = 3:len
+    count = 0;
+    len = floor(size(x,1)/800);
+    for i = 1:len
         count = count + 1;
-        temp = x(1+(i-1)*2000:i*2000,:);
+        temp = x(1+(i-1)*800:i*800,:);
         size(temp,1);
         F = fft(temp);
         pow = F.*conj(F);
@@ -13,20 +13,18 @@ function y = find_digits(x)
         count_pow = [count_pow; total_pow, count];
 
     end
-    %findpeaks(count_pow(:,1))
-    peak = findpeaks(count_pow(:,1));
+    [peak,idx] = findpeaks(count_pow(:,1),'MinPeakHeight',2500,'MinPeakDistance',3);
+    index = (idx-2)/5;
     for j = 1:size(peak)
-        if peak(j)<10000
-            continue;
+        i = index(j);
+        z = 0;
+        if (i+1)*4000 - size(x,1) > 0
+            z = (i+1)*4000 - size(x,1) ;
         end
-        idx = count_pow(:,1)==peak(j);
-        i = round(count_pow(idx,2)/2);
-        temp = x(1+(i-1)*4000:i*4000,:);
+        if 1+(i)*4000 - 0 < 0
+            z = 1+(i)*4000 ;
+        end
+        temp = x(1+(i)*4000-z:(i+1)*4000-z,:);
         y(:,j) = temp;
-        %y = [y; temp];  
     end
 end
-
-
-
-
