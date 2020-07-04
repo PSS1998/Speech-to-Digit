@@ -2,19 +2,20 @@
 y = y(:,1);
 %sound(y,Fs);
 ynew = resample(y,1,6);
+ynew = ynew(4000:size(ynew));
 audiowrite('speech1.wav', ynew, Fs/6);
 [y,Fs] = audioread('speech1.wav');
 %sound(y,Fs);
 
 digits = find_digits(y);
-%size(digits)
-%sound(digits(:,6),8000);
-%plot(digits(:,6))
+% plot(digits(:,10));
+% saveas(gcf,'9.png')
+% size(digits)
+% sound(digits(:,5),8000);
 
 N = 810195526;
 result = int2speech(digits, N);
-%size(result)
-%audiowrite('speech2.wav', result, 8000);
+audiowrite('speech2.wav', result, 8000);
 %sound(result,8000);
 sz = size(result);
 noise = randn(sz);
@@ -29,11 +30,8 @@ total_pow2 = sum(pow);
 snr = total_pow2/total_pow1;
 result = result+noise;
 %sound(result,8000);
-%audiowrite('speech3.wav', result, 8000);
+audiowrite('speech3.wav', result, 8000);
 
 [y,Fs] = audioread('speech3.wav');
-%y = y(:,1);
-%[p,q] = rat(8000 / Fs);
-%ynew = resample(y,p,q);
 result = speech2int(digits, y);
 result
